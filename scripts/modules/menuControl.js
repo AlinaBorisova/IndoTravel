@@ -1,4 +1,5 @@
-import {menuAnimation} from "./animation.js";
+import {menuAnimationOpen} from "./animation.js";
+import {menuAnimationClose} from "./animation.js";
 
 export const menuControl = () => {
   const menuBtn = document.querySelector('.header__menu-button');
@@ -6,12 +7,13 @@ export const menuControl = () => {
 
   const openMenu = () => {
     menuBtn.addEventListener('click', () => {
-      setTimeout(() => {
-        menu.style.cssText = `
-        opacity: 1;
-        z-index: 1;
-        `;
-      }, 300);
+      // setTimeout(() => {
+      //   menu.style.cssText = `
+      //   opacity: 1;
+      //   z-index: 1;
+      //   `;
+      // }, 300);
+      menuAnimationOpen();
     });
   };
   
@@ -19,7 +21,7 @@ export const menuControl = () => {
     window.addEventListener('click', (e) => {
       const target = e.target;
       if (target !== menuBtn ) {
-        menuAnimation();
+        menuAnimationClose();
       };
     });
   };

@@ -55,7 +55,19 @@ export const addAirolane = () => {
   });
 };
 
-export const menuAnimation = () => {
+export const menuAnimationOpen = () => {
+  const menu = document.querySelector('.header__menu');
+  let op = 0;
+  setTimeout(function stepMenu() {
+    if (op > 1) return;
+    menu.style.opacity = op;
+    op += 0.1;
+    menu.style.zIndex = 1
+    setTimeout(stepMenu, 100);
+  }, 100);
+};
+
+export const menuAnimationClose = () => {
   const menu = document.querySelector('.header__menu');
   let op = 0.1;
   let stepMenu = setInterval(() => {
