@@ -3,28 +3,30 @@ import {menuAnimationClose} from "./animation.js";
 
 export const menuControl = () => {
   const menuBtn = document.querySelector('.header__menu-button');
-  const menu = document.querySelector('.header__menu');
 
   const openMenu = () => {
     menuBtn.addEventListener('click', () => {
-      // setTimeout(() => {
-      //   menu.style.cssText = `
-      //   opacity: 1;
-      //   z-index: 1;
-      //   `;
-      // }, 300);
-      menuAnimationOpen();
+      if (!menuBtn.classList.contains('menu__active')) {
+        menuBtn.classList.add('menu__active');
+        menuAnimationOpen();
+      } else {
+        menuAnimationClose();
+        closeMenu();
+        menuBtn.classList.remove('menu__active');
+      }; 
     });
   };
   
   const closeMenu = () => {
     window.addEventListener('click', (e) => {
       const target = e.target;
-      if (target !== menuBtn ) {
+      if (target !== menuBtn) {
+        if (menuBtn.classList.contains('menu__active')) {
+          menuBtn.classList.remove('menu__active');
+        };
         menuAnimationClose();
       };
     });
   };
   openMenu();
-  closeMenu();
 };
