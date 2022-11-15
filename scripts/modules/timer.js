@@ -1,7 +1,7 @@
 export const getElements = () => {
   const setTimer = document.querySelector('.timer');
   setTimer.removeAttribute('data-timer-deadline');
-  setTimer.setAttribute('data-deadline', '2022/10/30');
+  setTimer.setAttribute('data-deadline', '2022/11/30');
   const getTimer = setTimer.getAttribute('data-deadline');
   
   return getTimer;
@@ -67,9 +67,8 @@ export const timer = deadline => {
     minutesUnits.textContent = sklonenie(minutesCount.textContent, ['минута', 'минуты', 'минут']);
 
     const intervalId = setTimeout(start, 60000);
-
-    // доп. задание с секундами
-    if (timer.days = 0 && timer.hours <= 24) {
+  
+    if (timer.days === 0 && timer.hours <= 24) { // доп. задание с секундами
       clearTimeout(timer.intervalId);
       setTimeout(start, 1000);
       const itemDays = document.querySelector('.timer__item_days');
@@ -78,9 +77,7 @@ export const timer = deadline => {
       secondsCount.textContent = timer.seconds;
       secondUnits.textContent = sklonenie(secondUnits.textContent, ['секунда', 'секунды', 'секунд']);
       seconds.style.display = null;
-    };
-
-    if(timer.timeRemaining <= 0) {
+    } else if(timer.timeRemaining <= 0) {
       clearTimeout(intervalId);
       document.querySelector('.hero__text').remove();
       document.querySelector('.hero__timer').remove();
