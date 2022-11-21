@@ -1,18 +1,51 @@
-const loadDates = async () => {
-  const result = await fetch('date.json')
-  const data = await result.json()
-  return data;
+import {createModalSuccess} from "./createElements.js";
+
+export const loadDates = (callback) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'date.json')
+
+  xhr.addEventListener('load', () => {
+      const data = JSON.parse(xhr.response);
+      callback(data)
+      console.log('load')
+
+  });
+
+  xhr.addEventListener('error', () => {
+      console.log('error')
+  });
+
+  xhr.send();
+}; 
+const modalOpenSuccess = function() {
+  createModalSuccess();
+  const modal = document.querySelector('.modal-success');
+  modal.style.display = 'block';
+}
+const sendData = (body, callback) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://jsonplaceholder.typicode.com/posts')
+
+  xhr.setRequestHeader('Content-Type', 'application/json')
+  xhr.addEventListener('load', () => {
+      const data = JSON.parse(xhr.response);
+      callback(data);
+  });
+
+  xhr.addEventListener('error', () => {
+      console.log('error')
+  });
+
+  xhr.send(JSON.stringify(body));
 };
   
-export const renderDatesTour = async () => {
-  const data = await loadDates();
+export const renderDatesTour = (data) => {
   const dateTour = document.querySelectorAll('.tour__select')[0];
   const peopleTour = document.querySelectorAll('.tour__select')[1];
   const dateReservation = document.querySelectorAll('.reservation__select')[0];
   const peopleReservation = document.querySelectorAll('.reservation__select')[1];
   let htmlDateTour = '<option> Выбери дату </option>';
   let htmlDateReservation = '<option> Дата путешествия </option>';
-  let htmlPeopleReservation = '<option> Количество человек </option>';
 
   const peopleCount = (index) => {
     let minPeople = data[index - 1]['min-people'];
@@ -57,6 +90,8 @@ export const renderDatesTour = async () => {
   });
 
   dateReservation.addEventListener('input', function(e) {
+    let htmlPeopleReservation = '<option> Количество человек </option>';
+
     const target = e.target;
     const indexOption = target.options.selectedIndex;
     const human = peopleCount(indexOption);    
@@ -87,3 +122,46 @@ export const renderDatesTour = async () => {
   dateTour.innerHTML = htmlDateTour;
   dateReservation.innerHTML = htmlDateReservation;
 };
+
+export const sendForm = function() {
+  const reservationForm = document.querySelector('.reservation__form');
+  const chooseDate = document.querySelectorAll('.reservation__select')[0];
+  const chooseCount = document.querySelectorAll('.reservation__select')[1];
+  const reservationName = document.querySelector('.reservation__input_name');
+  const reservationPhone = document.querySelector('#reservation__phone');
+  const footerInputWrap = document.querySelector('.footer__input-wrap');
+  const footerInput = document.querySelector('.footer__input');
+  const footerForm = document.querySelector('.footer__form');
+  const footerTitle = document.querySelector('.footer__form-title');
+  const footerText = document.querySelector('.footer__text');
+
+  reservationForm.addEventListener('submit', e => {
+    e.preventDefault();
+    sendData({
+      title: 'Reservation',
+      date: chooseDate.value,
+      people: chooseCount.value,
+      user: reservationName.value,
+      phone: reservationPhone.value,
+    }, (data) => {
+      modalOpenSuccess();
+      footerTitle.textContent = `Заявка с номером ${data.id} успешно отправлена`;
+      footerText.textContent = 'Наши менеджеры свяжутся с Вами в течение 3-х рабочих дней'
+      footerForm.removeChild(footerInputWrap);
+    });
+  });
+
+  footerForm.addEventListener('submit', e => {
+    e.preventDefault();
+    sendData({
+      title: 'E-mail',
+      body: footerInput.value,
+    }, () => {
+      footerTitle.textContent = 'Ваша заявка успешно отправлена';
+      footerText.textContent = 'Наши менеджеры свяжутся с Вами в течение 3-х рабочих дней';
+      footerForm.removeChild(footerInputWrap);
+    });
+  });
+}
+
+
