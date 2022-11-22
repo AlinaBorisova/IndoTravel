@@ -1,45 +1,51 @@
 import {createModalSuccess} from "./createElements.js";
+import {createModalError} from "./createElements.js";
 
-export const loadDates = (callback) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', 'date.json')
+export const URL = 'date.json';  
 
-  xhr.addEventListener('load', () => {
+export const httpRequest = (URL, {
+  method = 'GET',
+  callback,
+  body = {},
+  headers,
+}) => {
+  try { 
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, URL);
+
+    if (headers) {
+      for (const [key, value] of Object.entries(headers)) {
+        xhr.setRequestHeader(key, value)
+      };
+    };
+
+    xhr.addEventListener('load', () => {
+      if (xhr.status < 200 || xhr.status > 400) {
+        callback(new Error(xhr.status), xhr.response)
+        return;
+      };
+
       const data = JSON.parse(xhr.response);
-      callback(data)
-      console.log('load')
+      if (callback) callback(null, data);
+    });
 
-  });
+    xhr.addEventListener('error', () => {
+      callback(new Error(xhr.status), xhr.response)
+    });
 
-  xhr.addEventListener('error', () => {
-      console.log('error')
-  });
-
-  xhr.send();
-}; 
-const modalOpenSuccess = function() {
-  createModalSuccess();
-  const modal = document.querySelector('.modal-success');
-  modal.style.display = 'block';
-}
-const sendData = (body, callback) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://jsonplaceholder.typicode.com/posts')
-
-  xhr.setRequestHeader('Content-Type', 'application/json')
-  xhr.addEventListener('load', () => {
-      const data = JSON.parse(xhr.response);
-      callback(data);
-  });
-
-  xhr.addEventListener('error', () => {
-      console.log('error')
-  });
-
-  xhr.send(JSON.stringify(body));
+    xhr.send(JSON.stringify(body));
+  } catch (err) {
+    callback(new Error(err));
+  };
 };
   
-export const renderDatesTour = (data) => {
+export const renderDatesTour = (err, data) => {
+  if (err) {
+    console.warn(err, data)
+    console.log('сюда модальное с ошибкой');
+    return;
+  };
+
   const dateTour = document.querySelectorAll('.tour__select')[0];
   const peopleTour = document.querySelectorAll('.tour__select')[1];
   const dateReservation = document.querySelectorAll('.reservation__select')[0];
@@ -137,17 +143,30 @@ export const sendForm = function() {
 
   reservationForm.addEventListener('submit', e => {
     e.preventDefault();
-    sendData({
-      title: 'Reservation',
-      date: chooseDate.value,
-      people: chooseCount.value,
-      user: reservationName.value,
-      phone: reservationPhone.value,
-    }, (data) => {
-      modalOpenSuccess();
-      footerTitle.textContent = `Заявка с номером ${data.id} успешно отправлена`;
-      footerText.textContent = 'Наши менеджеры свяжутся с Вами в течение 3-х рабочих дней'
-      footerForm.removeChild(footerInputWrap);
+
+    httpRequest('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      body: {
+        title: 'Reservation',
+        date: chooseDate.value,
+        people: chooseCount.value,
+        user: reservationName.value,
+        phone: reservationPhone.value,
+      },
+      callback(err, data) {
+        if (err) {
+          console.warn(err, data)
+          modalOpenError();
+        }else modalOpenSuccess();
+
+        // Следующие три строчки для основного задания, закоментировала, потому что сделала с модальным окном
+        // footerTitle.textContent = `Заявка с номером ${data.id} успешно отправлена`;
+        // footerText.textContent = 'Наши менеджеры свяжутся с Вами в течение 3-х рабочих дней'
+        // footerForm.removeChild(footerInputWrap);
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      },
     });
   });
 
@@ -162,6 +181,68 @@ export const sendForm = function() {
       footerForm.removeChild(footerInputWrap);
     });
   });
-}
+};
 
+const closeModal = (elem) => {
+  const modalBtn = document.querySelector('.modal-btn');
+  const reservationForm = document.querySelector('.reservation__form');
+  modalBtn.addEventListener('click', () => {
+    if (elem.style.display = 'block') {
+      elem.style.display = 'none';
+      reservationForm.reset();
+      closeModal(elem);
+    };
+  });
+};
+
+export const modalOpenSuccess = function() {
+  createModalSuccess();
+  const modal = document.querySelector('.modal-success');
+  modal.style.display = 'block';  
+  if (modal.style.display = 'block') closeModal(modal);
+};
+
+export const modalOpenError = function() {
+  createModalError();
+  const modal = document.querySelector('.modal-error');
+  modal.style.display = 'block';
+  if (modal.style.display = 'block') closeModal(modal);
+};
+
+
+
+
+
+
+
+
+// Это дополнительный вариант для меня
+
+// const fetchResponse = async (URL, {
+//   method = 'GET',
+//   callback,
+//   body = {},
+//   headers,
+//   }) => {
+//     try {
+//       const options = {
+//         method,
+//       };
+
+//       if (body) options.body = JSON.stringify(body);
+//       if (headers) options.headers = headers;
+
+//       const responce = await fetch(URL, options);
+//       if (responce.ok) {
+//         const data = await responce.json();
+//         if (callback) callback(null, data);
+//         return;
+//       };
+
+//       throw new Error(`Ошибка ${responce.status}: ${responce.statusText}`);
+
+//     } catch (err) {
+//       callback(err);
+//     };
+// };
 
