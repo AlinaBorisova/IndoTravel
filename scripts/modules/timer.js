@@ -1,7 +1,7 @@
 export const getElements = () => {
   const setTimer = document.querySelector('.timer');
   setTimer.removeAttribute('data-timer-deadline');
-  setTimer.setAttribute('data-deadline', '2022/11/30');
+  setTimer.setAttribute('data-deadline', '2022/12/31');
   const getTimer = setTimer.getAttribute('data-deadline');
   
   return getTimer;
