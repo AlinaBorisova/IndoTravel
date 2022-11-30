@@ -7,6 +7,11 @@ export const getElements = () => {
   return getTimer;
 };
 
+export const sklonenie = (number, txt) => {
+  const cases = [2, 0, 1, 1, 1, 2];
+  return txt[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+};
+
 export const timer = deadline => {
   const daysCount= document.querySelector('.timer__count_days');
   const daysUnits = document.querySelector('.timer__units_days');
@@ -55,11 +60,6 @@ export const timer = deadline => {
     };
     if(minutesCount.textContent < 10) {
       minutesCount.textContent = "0" + minutesCount.textContent;
-    };
-
-    const sklonenie = (number, txt) => {
-      const cases = [2, 0, 1, 1, 1, 2];
-      return txt[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
     };
 
     daysUnits.textContent = sklonenie(daysCount.textContent, ['день', 'дня', 'дней']);

@@ -1,42 +1,72 @@
 import {createModalSuccess} from "./createElements.js";
 import {createModalError} from "./createElements.js";
+import {showModal} from "./modal.js";
+import {sklonenie} from "./timer.js";
 
 export const URL = 'date.json';  
 
-export const httpRequest = (URL, {
+// export const httpRequest = (URL, {
+//   method = 'GET',
+//   callback,
+//   body = {},
+//   headers,
+// }) => {
+//   try { 
+//     const xhr = new XMLHttpRequest();
+//     xhr.open(method, URL);
+
+//     if (headers) {
+//       for (const [key, value] of Object.entries(headers)) {
+//         xhr.setRequestHeader(key, value)
+//       };
+//     };
+
+//     xhr.addEventListener('load', () => {
+//       if (xhr.status < 200 || xhr.status > 400) {
+//         callback(new Error(xhr.status), xhr.response)
+//         return;
+//       };
+
+//       const data = JSON.parse(xhr.response);
+//       if (callback) callback(null, data);
+//     });
+
+//     xhr.addEventListener('error', () => {
+//       callback(new Error(xhr.status), xhr.response)
+//     });
+
+//     xhr.send(JSON.stringify(body));
+//   } catch (err) {
+//     callback(new Error(err));
+//   };
+// };
+
+export const fetchRequest = async (URL, {
   method = 'GET',
   callback,
-  body = {},
+  body,
   headers,
-}) => {
-  try { 
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, URL);
-
-    if (headers) {
-      for (const [key, value] of Object.entries(headers)) {
-        xhr.setRequestHeader(key, value)
+  }) => {
+    try {
+      const options = {
+        method,
       };
-    };
 
-    xhr.addEventListener('load', () => {
-      if (xhr.status < 200 || xhr.status > 400) {
-        callback(new Error(xhr.status), xhr.response)
+      if (body) options.body = JSON.stringify(body);
+      if (headers) options.headers = headers;
+
+      const responce = await fetch(URL, options);
+      if (responce.ok) {
+        const data = await responce.json();
+        if (callback) return callback(null, data);
         return;
       };
 
-      const data = JSON.parse(xhr.response);
-      if (callback) callback(null, data);
-    });
+      throw new Error(`Ошибка ${responce.status}: ${responce.statusText}`);
 
-    xhr.addEventListener('error', () => {
-      callback(new Error(xhr.status), xhr.response)
-    });
-
-    xhr.send(JSON.stringify(body));
-  } catch (err) {
-    callback(new Error(err));
-  };
+    } catch (err) {
+      return callback(err);
+    };
 };
   
 export const renderDatesTour = (err, data) => {
@@ -116,7 +146,11 @@ export const renderDatesTour = (err, data) => {
     const indexOptionPeople = dateReservation.options.selectedIndex;
     const infoTour = document.querySelector('.reservation__data')
     const price = document.querySelector('.reservation__price');
-    infoTour.textContent = `${dateReservation.value}, ${targetPeople.value} человек`;
+    const chooseCount = document.querySelectorAll('.reservation__select')[1];
+    infoTour.textContent = `
+      ${dateReservation.value}, ${targetPeople.value} 
+      ${sklonenie(chooseCount.value, ['человек', 'человека', 'человек'])};
+    `;
     
     data.forEach((item, i) => {
       if(indexOptionPeople === (i + 1)) {
@@ -127,14 +161,20 @@ export const renderDatesTour = (err, data) => {
 
   dateTour.innerHTML = htmlDateTour;
   dateReservation.innerHTML = htmlDateReservation;
+
+  return true;
 };
+
+export const getData = async () => {
+  const result = await fetchRequest(URL, {
+    method: 'GET',
+    callback: renderDatesTour,
+  });
+  console.log('GET', result)
+}
 
 export const sendForm = function() {
   const reservationForm = document.querySelector('.reservation__form');
-  const chooseDate = document.querySelectorAll('.reservation__select')[0];
-  const chooseCount = document.querySelectorAll('.reservation__select')[1];
-  const reservationName = document.querySelector('.reservation__input_name');
-  const reservationPhone = document.querySelector('#reservation__phone');
   const footerInputWrap = document.querySelector('.footer__input-wrap');
   const footerInput = document.querySelector('.footer__input');
   const footerForm = document.querySelector('.footer__form');
@@ -143,31 +183,7 @@ export const sendForm = function() {
 
   reservationForm.addEventListener('submit', e => {
     e.preventDefault();
-
-    httpRequest('https://jsonplaceholder.typicode.com/posts', {
-      method: 'POST',
-      body: {
-        title: 'Reservation',
-        date: chooseDate.value,
-        people: chooseCount.value,
-        user: reservationName.value,
-        phone: reservationPhone.value,
-      },
-      callback(err, data) {
-        if (err) {
-          console.warn(err, data)
-          modalOpenError();
-        }else modalOpenSuccess();
-
-        // Следующие три строчки для основного задания, закоментировала, потому что сделала с модальным окном
-        // footerTitle.textContent = `Заявка с номером ${data.id} успешно отправлена`;
-        // footerText.textContent = 'Наши менеджеры свяжутся с Вами в течение 3-х рабочих дней'
-        // footerForm.removeChild(footerInputWrap);
-      },
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
+    showModal();
   });
 
   footerForm.addEventListener('submit', e => {
@@ -208,41 +224,4 @@ export const modalOpenError = function() {
   modal.style.display = 'block';
   if (modal.style.display = 'block') closeModal(modal);
 };
-
-
-
-
-
-
-
-
-// Это дополнительный вариант для меня
-
-// const fetchResponse = async (URL, {
-//   method = 'GET',
-//   callback,
-//   body = {},
-//   headers,
-//   }) => {
-//     try {
-//       const options = {
-//         method,
-//       };
-
-//       if (body) options.body = JSON.stringify(body);
-//       if (headers) options.headers = headers;
-
-//       const responce = await fetch(URL, options);
-//       if (responce.ok) {
-//         const data = await responce.json();
-//         if (callback) callback(null, data);
-//         return;
-//       };
-
-//       throw new Error(`Ошибка ${responce.status}: ${responce.statusText}`);
-
-//     } catch (err) {
-//       callback(err);
-//     };
-// };
 
