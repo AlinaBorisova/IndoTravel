@@ -82,7 +82,9 @@ export const renderDatesTour = (err, data) => {
   const peopleReservation = document.querySelectorAll('.reservation__select')[1];
   let htmlDateTour = '<option> Выбери дату </option>';
   let htmlDateReservation = '<option> Дата путешествия </option>';
-
+  const nameReservation = document.querySelector('#reservation__name');
+  const phoneReservation = document.querySelector('#reservation__phone');
+  
   const peopleCount = (index) => {
     let minPeople = data[index - 1]['min-people'];
     let maxPeople = data[index - 1]['max-people'];
@@ -159,6 +161,14 @@ export const renderDatesTour = (err, data) => {
     });
   });
 
+  nameReservation.addEventListener('input', function(e) {
+    nameReservation.value = nameReservation.value.replace(/[^А-ЯЁ]\s/gi, '');
+  });
+
+  phoneReservation.addEventListener('input', function(e) {
+    phoneReservation.value = phoneReservation.value.replace(/[^0-9+]/gi, '');
+  });
+
   dateTour.innerHTML = htmlDateTour;
   dateReservation.innerHTML = htmlDateReservation;
 
@@ -181,10 +191,14 @@ export const sendForm = function() {
   const footerTitle = document.querySelector('.footer__form-title');
   const footerText = document.querySelector('.footer__text');
 
-  reservationForm.addEventListener('submit', e => {
-    e.preventDefault();
-    showModal();
-  });
+    reservationForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const nameReservation = document.querySelector('#reservation__name');
+
+      if (nameReservation.value.match(/\S{2,}\s\S{2,}\s\S{2,}/gi)) {
+        showModal();
+  } else alert('Не верно заполнено ФИО')
+});
 
   footerForm.addEventListener('submit', e => {
     e.preventDefault();
