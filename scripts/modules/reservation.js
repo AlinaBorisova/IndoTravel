@@ -162,7 +162,7 @@ export const renderDatesTour = (err, data) => {
   });
 
   nameReservation.addEventListener('input', function(e) {
-    nameReservation.value = nameReservation.value.replace(/[^А-ЯЁ]\s/gi, '');
+    nameReservation.value = nameReservation.value.replace(/[A-Z]/gi, '');
   });
 
   phoneReservation.addEventListener('input', function(e) {
