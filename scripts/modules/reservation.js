@@ -239,3 +239,37 @@ export const modalOpenError = function() {
   if (modal.style.display = 'block') closeModal(modal);
 };
 
+export const mask = () => {
+  const inputTel = document.querySelector('#reservation__phone');
+  const telMask = new Inputmask('+7(999)-999-99-99');
+  telMask.mask(inputTel);
+};
+
+export const justValidateForm = () => {
+  const justValidate = new JustValidate('.reservation__form');
+  justValidate
+  .addField('.reservation__input_name', [
+    {
+      rule: 'required',
+      errorMessage: 'Заполните это поле'
+    },
+  ])
+  .addField('#reservation__phone', [
+    {
+      rule: 'required',
+      errorMessage: 'Заполните это поле'
+    },
+    {
+      validator() {
+        const inputTel = document.querySelector('#reservation__phone');
+        const telMask = new Inputmask('+7(999)-999-99-99');
+        telMask.mask(inputTel);
+
+        const phone = inputTel.inputmask.unmaskedvalue();
+        return !!(Number(phone) && phone.length === 10);
+      },
+      errorMessage: 'Некорректный телефон',
+    },
+  ]);
+};
+

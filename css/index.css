@@ -1474,11 +1474,11 @@ p {
 		padding: 75px 0;
 }
 
-.album__slider {
+.swiper {
 		position: relative;
 }
 
-.album__item {
+.swiper-slide {
 		width: auto;
 }
 

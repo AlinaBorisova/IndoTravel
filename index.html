@@ -11,6 +11,15 @@
   <link rel="icon" type="image/png" href="img/favicon.png">
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/timer.css">
+
+  <!-- <link rel="stylesheet" href="css/swiper-bundle.min.css"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8.4.7/swiper-bundle.min.js"></script>
+  
+<script src="scripts/plugins/just-validate.production.min.js" defer></script>
+  <script src="scripts/plugins/inputmask.min.js" defer></script>
+
+<script src="scripts/modules/slider.js" defer></script>
   <title>Indonesia</title>
   <script type ="module" src="./scripts/script.js" defer></script>
   <script>
@@ -192,39 +201,39 @@
         <h2 class="section__title album__title">Фотоальбом</h2>
         <p class="section__text section__text_big album__text">За годы поездок у нас накопилось много фотографий из Индонезии. Представляем их вам.</p>
       </div>
-      <div class="album__slider">
-        <ul class="album__list">
-          <li class="album__item">
+      <div class="swiper">
+        <ul class="swiper-wrapper">
+          <li class="swiper-slide">
             <picture>
               <source srcset="img/album/1.avif" type="image/avif">
               <source srcset="img/album/1.webp" type="image/webp">
               <img src="img/album/1.jpg" alt="Остров" class="album__image"></picture>
           </li>
-          <li class="album__item">
+          <li class="swiper-slide">
             <picture>
               <source srcset="img/album/2.avif" type="image/avif">
               <source srcset="img/album/2.webp" type="image/webp">
               <img src="img/album/2.jpg" alt="Горы" class="album__image"></picture>
           </li>
-          <li class="album__item">
+          <li class="swiper-slide">
             <picture>
               <source srcset="img/album/3.avif" type="image/avif">
               <source srcset="img/album/3.webp" type="image/webp">
               <img src="img/album/3.jpg" alt="Лодки" class="album__image"></picture>
           </li>
-          <li class="album__item">
+          <li class="swiper-slide">
             <picture>
               <source srcset="img/album/4.avif" type="image/avif">
               <source srcset="img/album/4.webp" type="image/webp">
               <img src="img/album/4.jpg" alt="Закат" class="album__image"></picture>
           </li>
-          <li class="album__item">
+          <li class="swiper-slide">
             <picture>
               <source srcset="img/album/5.avif" type="image/avif">
               <source srcset="img/album/5.webp" type="image/webp">
               <img src="img/album/5.jpg" alt="Волны" class="album__image"></picture>
           </li>
-          <li class="album__item">
+          <li class="swiper-slide">
             <picture>
               <source srcset="img/album/6.avif" type="image/avif">
               <source srcset="img/album/6.webp" type="image/webp">
@@ -256,7 +265,7 @@
           <div class="reservation__contacts">
             <div class="reservation__input-wrap">
               <label for="reservation__name" class="reservation__label">ФИО</label>
-              <input required type="text" class="reservation__input reservation__input_name" id="reservation__name" placeholder="Введите ваше ФИО">
+              <input  type="text" class="reservation__input reservation__input_name" id="reservation__name" placeholder="Введите ваше ФИО">
             </div>
             <div class="reservation__input-wrap">
               <label for="reservation__phone" class="reservation__label">Телефон</label>
