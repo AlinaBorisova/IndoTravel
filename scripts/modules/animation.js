@@ -32,6 +32,7 @@ export const addAirolane = () => {
   const fly = document.createElement('div');
   fly.style.cssText = `
     position: fixed;
+    z-index: 1;
     width: 50px;
     height: 50px;
     right: 0;
@@ -42,7 +43,7 @@ export const addAirolane = () => {
   document.body.append(fly);
 
   const calcPositionFly = () => {
-    const maxTop = screen.availHeight - fly.clientHeight * 2;
+    const maxTop = screen.availHeight - fly.clientHeight * 2.5;
     const maxScroll = docEl.scrollHeight - docEl.clientHeight;
     const percentScroll = (window.pageYOffset * 100) / maxScroll;
 
