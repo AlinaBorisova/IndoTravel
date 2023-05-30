@@ -537,8 +537,10 @@ p {
 		font-weight: 700;
 		line-height: 150%;
 		color: #fff;
-		background-color: #FCB500;
-		-webkit-transition: 0.2s;
+		/*background-color: #FCB500;*/
+	background-color: #00008B;
+
+	-webkit-transition: 0.2s;
 		-o-transition: 0.2s;
 		transition: 0.2s;
 		border: 2px solid transparent;
@@ -550,7 +552,9 @@ p {
 }
 
 .button:active {
-		background-color: #D09600;
+		/*background-color: #D09600;*/
+	background-color: #00008B;
+
 }
 
 .button:disabled {
@@ -620,7 +624,11 @@ p {
 }
 
 .header__menu-button {
-		width: 35px;
+	position: absolute;
+	right: 95px;
+	top: 40px;
+
+	width: 35px;
 		height: 16px;
 		background: url("../img/hero/menu.svg") center/contain no-repeat;
 		-webkit-transition: -webkit-transform .3s ease-in;
@@ -656,7 +664,7 @@ p {
 
 .hero {
 		padding: 192px 0 200px;
-		background: url("../img/hero/background.jpg") center/cover no-repeat;
+		background: url("../img/hero/bg.jpg") center/cover no-repeat;
 		color: #fff;
 }
 
@@ -669,12 +677,6 @@ p {
 		-ms-grid-rows: auto 66px auto 66px auto;
 		grid-template-areas: "wrap wrap" "text timer" ". btn";
 		gap: 66px 90px;
-}
-
-.hero__timer {
-		-ms-grid-row: 3;
-		-ms-grid-column: 3;
-		grid-area: timer;
 }
 
 .hero__wrapper-title {
@@ -724,7 +726,7 @@ p {
 		align-self: flex-end;
 		-ms-grid-column-align: center;
 		justify-self: center;
-		padding: 25px 111px;
+		padding: 25px 80px;
 		border-radius: 12px;
 }
 
