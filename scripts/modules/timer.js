@@ -1,7 +1,7 @@
 export const getElements = () => {
   const setTimer = document.querySelector('.timer');
   setTimer.removeAttribute('data-timer-deadline');
-  setTimer.setAttribute('data-deadline', '2022/12/31');
+  setTimer.setAttribute('data-deadline', '2024/06/30');
   const getTimer = setTimer.getAttribute('data-deadline');
   
   return getTimer;
@@ -20,7 +20,6 @@ export const timer = deadline => {
   const minutesCount = document.querySelector('.timer__count_minutes');
   const minutesUnits = document.querySelector('.timer__units_minutes');
 
-    // доп. задание с секундами
   const seconds = document.createElement('p');
   seconds.classList.add('timer__item', 'timer__item_seconds');
   const secondsCount = document.createElement('span');
@@ -34,11 +33,9 @@ export const timer = deadline => {
   itemSeconds.append(seconds);
 
   const getTimeRemaining = () => {
-    // Доп задиние с временем по Гринвичу +03:00
     const dateStop = new Date(deadline);
     dateStop.setHours(dateStop.getHours() + 3);
 
-    // const dateStop = new Date(deadline).getTime();     Изначальный вариант с местным временем
     const dateNow = Date.now();
     const timeRemaining = dateStop - dateNow;
     const seconds = Math.floor(timeRemaining / 1000 % 60);
@@ -68,7 +65,7 @@ export const timer = deadline => {
 
     const intervalId = setTimeout(start, 60000);
   
-    if (timer.days === 0 && timer.hours <= 24) { // доп. задание с секундами
+    if (timer.days === 0 && timer.hours <= 24) {
       clearTimeout(timer.intervalId);
       setTimeout(start, 1000);
       const itemDays = document.querySelector('.timer__item_days');
